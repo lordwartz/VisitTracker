@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>VisitTracker</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 18px;
+        }
+
+        .statistics-container {
+            text-align: left;
+            margin-left: -50px;
+            max-width: 220px;
+            margin-top: -35px;
+        }
+        p {
+            font-size: 22px;
+        }
+        h2 {
+            margin-bottom: -10px;
+        }
+        h1 {
+            margin-bottom: -22px;
+        }
+    </style>
+</head>
+<body>
+<h1>Greetings from the VisitTracker!</h1>
+<p>Welcome to the website.</p>
+
+<h2>Statistics:</h2>
+<pre>{{statistics}}</pre>
+<pre>Statistics date: {{date}}</pre>
+<pre class="statistics-container">
+
+        Day total: {{ day_total }}
+        Month total: {{ month_total }}
+        Year total: {{ year_total }}
+        Total count: {{ total }}
+        Day unique: {{ day_unique }}
+        Month unique: {{ month_unique }}
+        Year unique: {{ year_unique }}
+        Total unique: {{ total_unique }}
+    </pre>
+</body>
+</html>
