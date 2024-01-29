@@ -10,7 +10,7 @@ class VisitTrackerTestCase(unittest.TestCase):
         self.tracker = VisitTracker()
 
     def test_get_day_total(self):
-        date = datetime(2024, 1, 1).date()
+        date = datetime(2024, 1, 1, 1, 1)
         self.assertEqual(self.tracker.get_day_total(date), 0)
 
         # Simulate visits on the same day
@@ -19,7 +19,7 @@ class VisitTrackerTestCase(unittest.TestCase):
         self.assertEqual(self.tracker.get_day_total(date), 2)
 
     def test_get_month_total(self):
-        date = datetime(2024, 1, 1).date()
+        date = datetime(2024, 1, 1, 1, 1)
         self.assertEqual(self.tracker.get_month_total(date), 0)
 
         # Simulate visits in January
@@ -29,7 +29,7 @@ class VisitTrackerTestCase(unittest.TestCase):
         self.assertEqual(self.tracker.get_month_total(date), 30)
 
     def test_get_yearly_total(self):
-        date = datetime(2024, 1, 1).date()
+        date = datetime(2024, 1, 1, 1, 1)
         self.assertEqual(self.tracker.get_yearly_total(date), 0)
 
         # Simulate visits throughout the year
@@ -43,7 +43,7 @@ class VisitTrackerTestCase(unittest.TestCase):
         self.assertEqual(self.tracker.get_yearly_total(date), days)
 
     def test_get_day_unique(self):
-        date = datetime(2024, 1, 1).date()
+        date = datetime(2024, 1, 1, 1, 1)
         self.assertEqual(self.tracker.get_day_unique(date), 0)
 
         # Simulate visits on the same day with different IPs
@@ -52,7 +52,7 @@ class VisitTrackerTestCase(unittest.TestCase):
         self.assertEqual(self.tracker.get_day_unique(date), 2)
 
     def test_get_month_unique(self):
-        date = datetime(2024, 1, 1).date()
+        date = datetime(2024, 1, 1, 1, 1)
         self.assertEqual(self.tracker.get_month_unique(date), 0)
 
         # Simulate visits in January with different IPs
@@ -62,7 +62,7 @@ class VisitTrackerTestCase(unittest.TestCase):
         self.assertEqual(self.tracker.get_month_unique(date), 30)
 
     def test_get_yearly_unique(self):
-        date = datetime(2024, 1, 1).date()
+        date = datetime(2024, 1, 1, 1, 1)
         self.assertEqual(self.tracker.get_yearly_unique(date), 0)
 
         # Simulate visits throughout the 3 months with different IPs
@@ -76,9 +76,9 @@ class VisitTrackerTestCase(unittest.TestCase):
         self.assertEqual(self.tracker.get_yearly_unique(date), days)
 
     def test_get_total_count(self):
-        dates = [datetime(2023, 1, 1).date(),
-                 datetime(2024, 2, 2).date(),
-                 datetime(2024, 3, 3).date()]
+        dates = [datetime(2023, 1, 1, 1, 1),
+                 datetime(2024, 2, 2, 1, 1),
+                 datetime(2024, 3, 3, 1, 1)]
         self.assertEqual(self.tracker.get_total_count(), 0)
 
         # Simulate visits on different dates from different clients
@@ -90,9 +90,9 @@ class VisitTrackerTestCase(unittest.TestCase):
         self.assertEqual(self.tracker.get_total_count(), 5)
 
     def test_get_unique_count(self):
-        dates = [datetime(2024, 1, 1).date(),
-                 datetime(2024, 2, 2).date(),
-                 datetime(2023, 3, 3).date()]
+        dates = [datetime(2024, 1, 1, 1, 1),
+                 datetime(2024, 2, 2, 1, 1),
+                 datetime(2023, 3, 3, 1, 1)]
         self.assertEqual(self.tracker.get_unique_count(), 0)
 
         # Simulate visits on different dates from different clients
@@ -105,7 +105,7 @@ class VisitTrackerTestCase(unittest.TestCase):
         self.assertEqual(self.tracker.get_unique_count(), 5)
 
     def test_update_data(self):
-        date = datetime(2024, 1, 1).date()
+        date = datetime(2024, 1, 1, 1, 1)
         self.assertEqual(self.tracker.get_day_total(date), 0)
 
         # Simulate a single visit
@@ -121,3 +121,23 @@ class VisitTrackerTestCase(unittest.TestCase):
         for i in range(1, 6):
             self.tracker.update(date, f'192.168.0.{i}')
         self.assertEqual(self.tracker.get_day_total(date), 11)
+
+    def test_united_range_data(self):
+        tracker = VisitTracker()
+
+        # Добавляем посещения в разные дни года
+        tracker.update(datetime(2022, 1, 1, 13, 15), '192.168.0.1')
+        tracker.update(datetime(2022, 1, 1, 14, 2), '192.168.0.2')
+        tracker.update(datetime(2022, 4, 5, 7, 0), '192.168.0.3')
+        tracker.update(datetime(2022, 7, 20, 20, 30), '192.168.0.4')
+        tracker.update(datetime(2022, 7, 20, 21, 1), '192.168.0.5')
+
+        # Задаем промежуток от февраля до июня
+        start_date = datetime(2022, 1, 1, 14)
+        end_date = datetime(2022, 7, 20, 20)
+
+        # Получаем информацию о посещениях в заданном промежутке
+        united_data = tracker._get_united_range_data(start_date, end_date)
+
+        # Проверяем, что количество посещений входит в ожидаемый диапазон
+        self.assertEqual(3, len(united_data))
