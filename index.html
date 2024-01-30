@@ -11,36 +11,29 @@
             height: 100vh;
             font-size: 18px;
         }
-        .statistics {
-            max-width: 700px;
-        }
         .statistics-container {
             text-align: left;
             margin-left: -50px;
             max-width: 220px;
-            margin-top: -35px;
-        }
-        p {
-            font-size: 22px;
         }
         h2 {
             margin-bottom: -10px;
         }
         h1 {
-            margin-bottom: -22px;
+            margin-bottom: -15px;
+        }
+        pre {
+            margin-bottom: -5px;
         }
     </style>
 </head>
 <body>
 <h1>Greetings from the VisitTracker!</h1>
-<p>Welcome to the website.</p>
-
+<pre>Welcome to the website.</pre>
 <h2>Statistics:</h2>
-<pre
-class="statistics">{{statistics}}</pre>
-<pre>Statistics date: {{date}}</pre>
+<pre>Current statistics date: {{date}}</pre>
+<pre>General statistics</pre>
 <pre class="statistics-container">
-
         Day total: {{ day_total }}
         Month total: {{ month_total }}
         Year total: {{ year_total }}
@@ -48,7 +41,15 @@ class="statistics">{{statistics}}</pre>
         Day unique: {{ day_unique }}
         Month unique: {{ month_unique }}
         Year unique: {{ year_unique }}
-        Total unique: {{ total_unique }}
-    </pre>
+        Total unique: {{ total_unique }}</pre>
+<pre>Other supported statistics for any date range:</pre>
+<pre>
+                * Total visits
+                * Unique visits
+                * By resolution (year, month, day, hour, minute, second)
+                    row format: ((visit_date, interval_num), total, unique)
+                * By weekdays:
+                    row format: (weekday_name, total, unique)
+</pre>
 </body>
 </html>
